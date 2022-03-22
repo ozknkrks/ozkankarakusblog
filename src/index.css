@@ -1,13 +1,16 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.activeNavItem{
+    @apply flex flex-row font-bold text-emerald-800 dark:text-emerald-400
+}
+.InactiveNavItem{
+    @apply flex flex-row font-bold text-white hover:text-emerald-800  dark:text-gray-300 dark:hover:text-white transform transition-colors delay-100
+}
+.blog{
+    @apply flex flex-row items-start space-x-10  rounded-lg
+}
+.link{
+    @apply hover:text-emerald-500 hover:underline
 }
