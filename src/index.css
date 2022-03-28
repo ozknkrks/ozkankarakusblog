@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 .activeNavItem{
-    @apply flex flex-row font-bold text-emerald-800 dark:text-emerald-400
+    @apply flex flex-row font-bold text-fifthColor dark:text-siteColor
 }
 .InactiveNavItem{
-    @apply flex flex-row font-bold text-white hover:text-emerald-800  dark:text-gray-300 dark:hover:text-white transform transition-colors delay-100
+    @apply flex flex-row font-bold text-white hover:text-fifthColor  dark:text-gray-300 dark:hover:text-white transform transition-colors delay-100
 }
 .blog{
     @apply flex flex-row items-start space-x-10  rounded-lg
 }
 .link{
-    @apply hover:text-emerald-500 hover:underline
+    @apply hover:text-secondaryColor hover:underline
 }

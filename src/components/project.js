@@ -4,8 +4,9 @@ const project = (props) => {
   return (
     <div className="flex flex-row items-start bg-gray-50 dark:bg-gray-800">
       <img
+      alt="project"
         src={props.data.image}
-        className="h-48 object-cover aspect-square"
+        className="h-40 object-cover aspect-square"
       />
       <div className="flex flex-col py-3 px-7 ">
         <a

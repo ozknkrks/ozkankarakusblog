@@ -3,26 +3,29 @@ import { useParams, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
 import parse from "html-react-parser";
 import { db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
-//import { CKEditor } from "@ckeditor/ckeditor5-react";
-
-//import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import moment from "moment";
+import { addDoc, doc, onSnapshot } from "firebase/firestore";
 //import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
-
+import { CKEditor } from "ckeditor4-react";
 import "draft-js/dist/Draft.css";
 const BlogDetails = (props) => {
+  //var data = CKEditor.instances.editor1.getData();
   const [filtered, setFiltered] = useState([]);
-
+  const [deneme, setDeneme] = useState("");
+  /* 
   function convertToSlug(Text) {
     return Text.toLowerCase()
       .replace(/[^\w ]+/g, "")
       .replace(/ +/g, "-");
   }
+  */
   const navigate = useNavigate();
   //const location = useLocation();
   //const blogDetails = location.state;
   let params = useParams();
-
+  const onEditorChange = (e) => {
+    setDeneme(e.editor.getData());
+  };
   useEffect(() => {
     const docRef = doc(db, "posts", params.blogId);
     onSnapshot(docRef, (doc) => {
@@ -38,9 +41,15 @@ const BlogDetails = (props) => {
         <meta charSet="utf-8" />
         <title>{filtered.title}</title>
         <link rel="canonical" href="ozkankarakus.com" />
-        <meta name="description" content="Nested component" />
+
+        <meta
+          id="meta-description"
+          name="description"
+          content="Some description."
+        />
       </Helmet>
       <div className="min-h-screen max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-2xl xl:max-w-4xl  pt-10 mx-auto md-bg-blue-300">
+        {/*top buttons */}
         <div className="flex flex-row items-center justify-between mb-2">
           <button
             onClick={() => navigate(-1)}
@@ -108,89 +117,50 @@ const BlogDetails = (props) => {
         </section>
         <div
           style={{ fontFamily: "Poppins" }}
-          className="flex flex-row space-x-3 text-xs pt-3 dark:text-gray-300 text-gray-500"
+          className="flex flex-row items-center space-x-3 text-xs pt-3 dark:text-gray-300 text-gray-500"
         >
-          <div>Published {filtered.createdAt}</div>
+          <div className="flex flex-row items-center space-x-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{moment(filtered.createdDate).fromNow()}</span>
+          </div>
           <div>• 5 min read • </div>
           <div>4 comments</div>
         </div>
         <section className="pt-5 pb-5" style={{ fontFamily: "Poppins" }}>
           {parse(String(filtered.content))}
         </section>
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          {/* yorumlar */}
-          <div className="">
-            <span
-              className="text-xl font-bold"
-              style={{ fontFamily: "Montserrat" }}
-            >
-              Yorum gönder
-            </span>
-            <input
-              type="text"
-              name="first-name"
-              id="first-name"
-              autoComplete="given-name"
-              placeholder="Adınız"
-              className="mt-1 outline-none dark:bg-gray-800 bg-gray-100 rounded-md py-2 px-3 block w-full shadow-sm text-sm"
-            />
-            <textarea
-              id="about"
-              name="about"
-              rows={3}
-              className="shadow-sm outline-none dark:bg-gray-800 py-2 px-3 bg-gray-100 mt-2 block w-full text-sm rounded-md"
-              placeholder="Yorumunuz"
-              defaultValue={""}
-            />
-            <button className="bg-emerald-500 text-white px-2   py-1 mt-2 flex mr-auto rounded-sm">
-              Gönder
-            </button>
-          </div>
-          {/* yorum gönder */}
-          <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md space-y-3">
-            <span
-              className="text-xl font-bold"
-              style={{ fontFamily: "Montserrat" }}
-            >
-              Yorumlar
-            </span>
-            {/* yorum component */}
-            <div className="flex flex-row items-start space-x-2">
-              <img
-                alt="comment author profile"
-                src="https://www.indyturk.com/sites/default/files/styles/1368x911/public/article/main_image/2020/08/14/440866-1854448434.jpg?itok=QD0-zZeA"
-                className="w-10 h-10 object-cover rounded-full"
-              />
-              <div className="flex flex-col justify-center">
-                <span className="" style={{ fontFamily: "Montserrat" }}>
-                  Özkan Karakuş
-                </span>
-                <span className="text-sm" style={{ fontFamily: "Poppins" }}>
-                  Title Title Title Title Title Title Title Title Title Title
-                  Title Title Title Title Title Title Title Title Title Title
-                </span>
-              </div>
-            </div>
-            {/* yorum component */}
-            <div className="flex flex-row items-start space-x-2">
-              <img
-                alt="comment author profile"
-                src="https://www.indyturk.com/sites/default/files/styles/1368x911/public/article/main_image/2020/08/14/440866-1854448434.jpg?itok=QD0-zZeA"
-                className="w-10 h-10 object-cover rounded-full"
-              />
-              <div className="flex flex-col justify-center">
-                <span className="" style={{ fontFamily: "Montserrat" }}>
-                  Özkan Karakuş
-                </span>
-                <span className="text-sm" style={{ fontFamily: "Poppins" }}>
-                  Title Title Title Title Title Title Title Title Title Title
-                  Title Title Title Title Title Title Title Title Title Title
-                </span>
-              </div>
-            </div>
+        <div className="flex flex-col space-y-2">
+          <span
+            className="text-2xl  text-secondaryColor"
+            style={{ fontFamily: "Montserrat" }}
+          >
+            Etiketler
+          </span>
+          <div className="grid grid-cols-10 gap-4">
+            {filtered.tags != null
+              ? filtered.tags
+                  .split(",")
+                  .map((x) => (
+                    <span className="bg-secondaryColor text-white px-3 text-center rounded-md text-xs py-0.5">
+                      {x}
+                    </span>
+                  ))
+              : null}
           </div>
         </div>
-        <div className="text-black"></div>
       </div>
     </>
   );

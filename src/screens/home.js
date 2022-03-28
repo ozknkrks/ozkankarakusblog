@@ -6,7 +6,9 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 const Home = () => {
   const [projects, setProjects] = useState([]);
+  const [skills, setSkills] = useState([]);
   const projectsCollectionRef = collection(db, "projects");
+  const skillsCollectionRef = collection(db, "skills");
   useEffect(() => {
     const getProjects = async () => {
       const data = await getDocs(projectsCollectionRef);
@@ -14,11 +16,17 @@ const Home = () => {
       console.log(data);
     };
     getProjects();
+    const getSkills = async () => {
+      const data = await getDocs(skillsCollectionRef);
+      setSkills(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      console.log(data);
+    };
+    getSkills();
   }, []);
   return (
     <div className="min-h-screen w-full">
       <div className="pt-5 px-5 border-b-2 border-b-gray-100 dark:border-b-gray-800 w-full bg-gray-100 dark:bg-transparent">
-        <div className="flex flex-col py-10 md:flex-row md:space-x-4 space-y-5 md:space-y-0 justify-between items-start md:items-center max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto">
+        <div className="flex flex-col py-10 md:flex-row md:space-x-4 space-y-5 md:space-y-0 justify-between items-start md:items-center max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl 2xl:max-w-5xl   mx-auto">
           <div className="flex flex-col items-start justify-center space-y-2">
             <span
               className="text-gray-800 dark:text-white font-bold text-4xl"
@@ -42,7 +50,7 @@ const Home = () => {
               className="flex flex-row items-center space-x-5"
               style={{ fontFamily: "Poppins" }}
             >
-              <button className="bg-emerald-500 text-white py-2 px-5 rounded-md font-semibold">
+              <button className="bg-secondaryColor  text-white py-2 px-5 rounded-md font-semibold">
                 Portföy indir
               </button>
               <button className="bg-gray-600 dark:bg-gray-800 transition-colors delay-200 text-white py-2 px-5 rounded-md font-bold">
@@ -60,13 +68,13 @@ const Home = () => {
 
       {/*What i do */}
       <div className="border-b-2 border-b-gray-100 dark:border-b-gray-800 py-10">
-        <div className="max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto space-y-5">
+        <div className="max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl 2xl:max-w-5xl  mx-auto space-y-5">
           <div className="flex flex-col justify-center space-y-5 mx-auto">
             <span
-              className="text-2xl border-l-4 font-bold rounded-tl-sm rounded-bl-sm border-l-emerald-400 pl-3"
+              className="text-2xl border-l-4 font-bold rounded-tl-sm rounded-bl-sm border-l-siteColor pl-3"
               style={{ fontFamily: "Poppins" }}
             >
-              What I do
+              Ben kimim?
             </span>
             <span
               style={{ fontFamily: "Poppins" }}
@@ -80,43 +88,24 @@ const Home = () => {
             </span>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-            <SkillCard
-              skill="Vanilla JavaScript"
-              description="List skills/technologies here. You can change the icon above to
-                any of the 1500+ FontAwesome 5 free icons available. Aenean
-                commodo ligula eget dolor."
-            />
-            <SkillCard
-              skill="Angular, React & Vue"
-              description="List skills/technologies here. You can change the icon above to any of the 1500+ FontAwesome 5 free icons available. Aenean commodo ligula eget dolor."
-            />
-            <SkillCard
-              skill="Node.js"
-              description="List skills/technologies here. You can change the icon above to any of the 1500+ FontAwesome 5 free icons available. Aenean commodo ligula eget dolor."
-            />
-            <SkillCard
-              skill="Python & Django"
-              description="List skills/technologies here. You can change the icon above to any of the 1500+ FontAwesome 5 free icons available. Aenean commodo ligula eget dolor."
-            />
-            <SkillCard
-              skill="PHP"
-              description="List skills/technologies here. You can change the icon above to any of the 1500+ FontAwesome 5 free icons available. Aenean commodo ligula eget dolor."
-            />
+            {skills.map((skill) => (
+              <SkillCard data={skill} />
+            ))}
           </div>
         </div>
       </div>
 
       {/*featured projects */}
       <div className="py-10">
-        <div className="mx-auto max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl">
+        <div className="mx-auto max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl 2xl:max-w-5xl ">
           <h2
-            className="mb-8 text-2xl font-bold border-l-4 border-l-emerald-400 pl-3"
+            className="mb-8 text-2xl font-bold border-l-4 rounded-tl-sm rounded-bl-sm border-l-siteColor pl-3"
             style={{ fontFamily: "Poppins" }}
           >
             Öne Çıkan Projeler
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-            {projects.slice(0,2).map((project) => (
+            {projects.slice(0, 2).map((project) => (
               <ProjectComponent data={project} />
             ))}
           </div>
@@ -124,7 +113,7 @@ const Home = () => {
             to={{
               pathname: "/portfolio/",
             }}
-            className=" bg-emerald-500 text-white px-4 py-2  mt-4 rounded-md flex w-28 items-center justify-center mx-auto text-xs font-bold"
+            className=" bg-secondaryColor text-white px-4 py-2  mt-4 rounded-md flex w-28 items-center justify-center mx-auto text-xs font-bold"
             style={{ fontFamily: "Poppins" }}
           >
             Tümünü gör

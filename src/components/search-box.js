@@ -17,10 +17,26 @@ const SearchBox = (props) => {
   function closeModal() {
     setIsOpen(false);
   }
-  function convertToSlug(Text) {
-    return Text.toLowerCase()
-      .replace(/[^\w ]+/g, "")
-      .replace(/ +/g, "-");
+  function convertToSlug(str) {
+    str = str.replace(/^\s+|\s+$/g, ""); // trim
+    str = str.toLowerCase();
+  
+    // remove accents, swap ñ for n, etc
+    var from = "åàáãäâèéëêìıíïîòóöôùúüûñç·/_,:;";
+    var to = "aaaaaaeeeeiiiioooouuuunc------";
+  
+    for (var i = 0, l = from.length; i < l; i++) {
+      str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+    }
+  
+    str = str
+      .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+      .replace(/\s+/g, "-") // collapse whitespace and replace by -
+      .replace(/-+/g, "-") // collapse dashes
+      .replace(/^-+/, "") // trim - from start of text
+      .replace(/-+$/, ""); // trim - from end of text
+  
+    return str;
   }
   const defaultOptions = {
     loop: true,
@@ -39,19 +55,11 @@ const SearchBox = (props) => {
         Welcome to my blog. Subscribe and get my latest blog post in your inbox.
       </span>
       <div className="flex flex-row">
-        <input
-          className="rounded-md px-3 h-10 w-96  outline-none bg-gray-50 focus:ring-1 focus:ring-inherit focus:ring-emerald-400 dark:bg-gray-800"
-          placeholder="Bir arama yap"
-          style={{ fontFamily: "Poppins" }}
-          onClick={openModal}
-          onChange={openModal}
-        />
+        
         <button
-          className="h-10 bg-emerald-500 px-5 text-white rounded-md ml-2"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Ara
-        </button>
+        onClick={openModal}
+        className="rounded-md px-3 h-10 w-96 border dark:border-0  outline-none bg-gray-50 shadow-md dark:bg-gray-800 flex items-center text-gray-400" style={{fontFamily:"Poppins"}}>Bir arama yap</button>
+        
       </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
@@ -174,7 +182,7 @@ const SearchBox = (props) => {
                                   post.id,
                               }}
                               state={post}
-                              className="text-black font-bold hover:text-emerald-400"
+                              className="text-black font-bold hover:text-siteColor"
                               style={{ fontFamily: "Poppins" }}
                             >
                               {post.title.length > 45

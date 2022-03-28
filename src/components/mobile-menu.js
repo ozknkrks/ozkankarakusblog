@@ -3,7 +3,7 @@ import React from "react";
 const MobileMenu = () => {
   return (
     <>
-      <div className="lg:hidden bg-emerald-400 py-6">
+      <div className="lg:hidden bg-siteColor py-6">
         <div className="flex flex-row items-center justify-between max-w-md  mx-auto ">
           <button>
             <svg

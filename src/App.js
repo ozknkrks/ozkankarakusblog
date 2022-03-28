@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 //import BlogList from "./components/blog-list";
 import Sidebar from "./components/sidebar";
@@ -14,9 +14,24 @@ import BlogDetails from "./screens/blog-details";
 //import { Routes, Route } from "react-router-dom";
 import Home from "./screens/home";
 //import About from "./pages/About";
-
+import "moment/locale/tr";
+import moment from "moment";
+import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
+import PageNotFound from "./screens/page-not-found";
 //import Navbar from "./components/Navbar";
 const App = () => {
+  useEffect(() => {
+    /* 
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+    */
+    Prism.highlightAll();
+
+    moment.locale("tr");
+  }, []);
+
   return (
     <div className="flex flex-row bg-transparent w-full">
       <Sidebar />
@@ -25,8 +40,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/blog" exact element={<Blog />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:blogTitle-:blogId" element={<BlogDetails />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
       </div>

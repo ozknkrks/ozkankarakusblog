@@ -4,22 +4,23 @@ import BlogList from "../components/blog-list";
 import SearchBox from "../components/search-box";
 import { Helmet } from "react-helmet";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
-
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const postsCollectionRef = collection(db, "posts");
-  const [count, setCount] = useState(1);
-  
+  const q =query(postsCollectionRef,orderBy("createdDate","desc"))
+  const [count, setCount] = useState(5);
+
   useEffect(() => {
+    
     const getPosts = async () => {
-      const data = await getDocs(postsCollectionRef);
+      //const data = await getDocs(postsCollectionRef);
+      const data = await getDocs(q);
       setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       console.log(data);
     };
     getPosts();
-    //setCount(new Date().toDateString());
   }, []);
   return (
     <>
@@ -36,14 +37,15 @@ const Home = () => {
         {posts.slice(0, count).map((post) => (
           <BlogList data={post} />
         ))}
+        
         <button
           onClick={() => {
             setCount(count + 1);
           }}
           style={{ fontFamily: "Poppins" }}
-          className="w-full py-2 text-white rounded-md bg-emerald-400"
+          className="w-full py-2 text-white rounded-md bg-siteColor"
         >
-          <span>Daha fazla yükle (+1)</span>
+          <span>Daha fazla yükle</span>
         </button>
       </section>
     </>
